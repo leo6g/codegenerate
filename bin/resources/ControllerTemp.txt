@@ -1,0 +1,233 @@
+package #controllerPackageName#;
+
+
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import com.lfc.core.bean.OutputObject;
+import com.lfc.wxadminweb.common.constant.Constants;
+import com.lfc.core.util.BeanUtil;
+import com.lfc.wxadminweb.common.web.BaseController;
+#sbImport#
+
+import #entityFullName#Form;
+
+/**
+ * <h2></br>
+ * 
+ * @descript 
+ * @author #author#
+ * @date #createDateInComment#
+ * @since JDK 1.7
+ *
+ */
+@Controller
+@RequestMapping("#subModifier##subEntityName#")
+public class #entityName#Controller extends BaseController{
+	
+	#sbInitBinder#
+	
+	/**
+	 * 跳转到#objectCN#列表页面
+	 * @param request
+	 * @param mv
+	 * @return
+	 */
+	@RequestMapping(value = "list")
+	public ModelAndView list( ModelAndView mv) {
+		mv.setViewName("weixin/#subEntityNameToLow#-list");
+		return mv;
+	}
+	/**
+	 * 分页查询#objectCN#列表
+	 * @param #entityName#Form
+	 * @param result
+	 * @param request
+	 * @param model
+	 * @param mm
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getList")
+	public OutputObject getList(@ModelAttribute("#entityVar#Form") #entityName#Form #entityVar#Form,
+			BindingResult result,  Model model, ModelMap mm) {
+		if (result.hasErrors()) {
+			returnValidatorAjaxResult(result);
+		}
+		OutputObject outputObject = null;
+		Map<String, Object> map = BeanUtil.convertBean2Map(#entityVar#Form);
+		outputObject = getOutputObject(map, "#entityVar#Service", "getList");
+		return outputObject;
+	}
+	/**
+	 *根据ID查询#objectCN#
+	 * @param #entityName#Form
+	 * @param result
+	 * @param request
+	 * @param model
+	 * @param mm
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getById")
+	public OutputObject getById(@ModelAttribute("#entityName#Form") #entityName#Form #entityVar#Form,BindingResult result, Model model,ModelMap mm) {
+		OutputObject outputObject = null;
+		if (result.hasErrors()) {
+			returnValidatorAjaxResult(result);
+		}
+		Map<String, Object> map = BeanUtil.convertBean2Map(#entityVar#Form);	
+		outputObject = getOutputObject(map,"#entityVar#Service","getById");
+		return outputObject;
+	}
+	/**
+	 * 查看所有#objectCN#
+	 * @param "#entityName#Form"
+	 * @param result
+	 * @param request
+	 * @param model
+	 * @param mm
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getAll")
+	public OutputObject getAll(@ModelAttribute("#entityName#Form") #entityName#Form #entityVar#Form,BindingResult result, Model model,ModelMap mm) {
+		OutputObject outputObject = null;
+		if (result.hasErrors()) {
+			returnValidatorAjaxResult(result);
+		}
+		Map<String, Object> map = BeanUtil.convertBean2Map(#entityVar#Form);	
+		outputObject = getOutputObject(map,"#entityVar#Service","getAll");
+		return outputObject;
+	}
+	/**
+	 * 添加#objectCN#
+	 * @param #entityName#Form
+	 * @param result
+	 * @param request
+	 * @param model
+	 * @param mm
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "insert#entityName#")
+	public OutputObject insert#entityName#(@ModelAttribute("#entityName#Form") @Valid #entityName#Form #entityVar#Form,BindingResult result, Model model,ModelMap mm) {
+		if (result.hasErrors()) {
+				return returnValidatorAjaxResult(result);
+			}
+			OutputObject outputObject = null;
+			Map<String, Object> map = BeanUtil.convertBean2Map(#entityVar#Form);
+			#addCreateUser#
+			outputObject = getOutputObject(map, "#entityVar#Service", "insert#entityName#");
+			if(outputObject.getReturnCode().equals("0")){
+				outputObject.setReturnMessage("#objectCN#添加成功!");
+			}
+			return outputObject;
+	}
+	/**
+	 * 编辑#objectCN#
+	 * @param #entityName#Form
+	 * @param result
+	 * @param request
+	 * @param model
+	 * @param mm
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "update#entityName#")
+	public OutputObject update#entityName#(@ModelAttribute("#entityName#Form") @Valid #entityName#Form #entityVar#Form,BindingResult result, Model model,ModelMap mm) {
+		if (result.hasErrors()) {
+			return returnValidatorAjaxResult(result);
+		}
+		OutputObject outputObject = null;
+		Map<String, Object> map = BeanUtil.convertBean2Map(#entityVar#Form);
+		outputObject = getOutputObject(map, "#entityVar#Service", "update#entityName#");
+		if(outputObject.getReturnCode().equals("0")){
+			outputObject.setReturnMessage("#objectCN#编辑成功!");
+		}
+		return outputObject;
+	}
+	/**
+	 * 去往添加页面
+	 * @return
+	 */
+	@RequestMapping(value = "add")
+	public ModelAndView add() {
+		ModelAndView mav=new ModelAndView();
+		mav.setViewName("weixin/add-#subEntityNameToLow#");
+		return mav;
+	}
+	/**
+	 * 去往更新页面
+	 * @return
+	 */
+	@RequestMapping(value = "edit")
+	public ModelAndView edit(Model model) {
+		ModelAndView mav=new ModelAndView();
+		OutputObject outputObject = null;
+		Map<String, Object> map = new HashMap<String, Object>();
+		HttpServletRequest request = getRequest();
+		map.put("id", request.getParameter("id"));
+		outputObject = getOutputObject(map,"#entityVar#Service","getById");
+		model.addAttribute("output", outputObject);
+		mav.setViewName("weixin/edit-#subEntityNameToLow#");
+		return mav;
+	}
+	/**
+	 * 删除#objectCN#
+	 * @param departForm
+	 * @param result
+	 * @param request
+	 * @param model
+	 * @param mm
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "delete#entityName#")
+	public OutputObject delete#entityName#(@ModelAttribute("#entityName#Form") #entityName#Form #entityVar#Form,
+			BindingResult result,  Model model, ModelMap mm) {
+		if (result.hasErrors()) {
+			return returnValidatorAjaxResult(result);
+		}
+		OutputObject outputObject = null;
+		Map<String, Object> map = BeanUtil.convertBean2Map(#entityVar#Form);
+		outputObject = getOutputObject(map, "#entityVar#Service", "delete#entityName#");
+		if(outputObject.getReturnCode().equals("0")){
+			outputObject.setReturnMessage("#objectCN#删除成功!");
+		}
+		return outputObject;
+	}
+	/**
+	 * 逻辑删除#objectCN#
+	 * @param departForm
+	 * @param result
+	 * @param request
+	 * @param model
+	 * @param mm
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "logicDelete#entityName#")
+	public OutputObject logicDelete#entityName#(@ModelAttribute("#entityName#Form") #entityName#Form #entityVar#Form,
+			BindingResult result,  Model model, ModelMap mm) {
+		if (result.hasErrors()) {
+			return returnValidatorAjaxResult(result);
+		}
+		OutputObject outputObject = null;
+		Map<String, Object> map = BeanUtil.convertBean2Map(#entityVar#Form);
+		outputObject = getOutputObject(map, "#entityVar#Service", "logicDelete#entityName#");
+		if(outputObject.getReturnCode().equals("0")){
+			outputObject.setReturnMessage("逻辑删除成功!");
+		}
+		return outputObject;
+	}
+	
+}

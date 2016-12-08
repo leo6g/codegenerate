@@ -1,0 +1,87 @@
+package #serviceImplPackageName#;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import com.cmos.weixincore.util.DateUtil;
+import com.ai.frame.bean.InputObject;
+import com.ai.frame.bean.OutputObject;
+import com.cmos.weixincore.service.impl.BaseServiceImpl;
+import #servicePackageName#.I#entityName#Service ;
+
+public class #entityName#ServiceImpl extends BaseServiceImpl implements I#entityName#Service   {
+	private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("weixin");
+	@Override
+	public void getList(InputObject inputObject,
+			OutputObject outputObject) throws Exception {
+		List<Map<String, String>> list= getBaseDao().queryForList("#entityName#Mapper.getList", inputObject.getParams());
+		outputObject.setBeans(list);
+		int totalcount = getBaseDao().getTotalCount("#entityName#Mapper.queryUserCount", inputObject.getParams());
+		outputObject.setObject(totalcount);
+		 logger.info("getList success");
+	}
+	@Override
+	public void getById(InputObject inputObject,
+			OutputObject outputObject) throws Exception {
+		Object object=getBaseDao().queryForObject("#entityName#Mapper.getById", inputObject.getParams());
+		outputObject.setObject(object);
+
+	}
+	@Override
+	public void getAll(InputObject inputObject,
+			OutputObject outputObject) throws Exception {
+		inputObject.getParams().put("deleteFlag","0");
+		List<Map<String,String>> list = getBaseDao().queryForList("#entityName#Mapper.getAll", inputObject.getParams());
+		outputObject.setBeans(list);
+	
+	}
+	@Override
+	public int insert#entityName#(InputObject inputObject,
+			OutputObject outputObject) throws Exception {
+		String createTime = DateUtil.date2String(new Date(),DateUtil.DATE_PATTERN.YYYY_MM_DD_HH_MM_SS);
+		//查询#objectCN#是否已经存在 有code验证时放开
+		//Object object = getBaseDao().queryForObject("#entityName#Mapper.getByCode", inputObject.getParams());
+	//	if(object==null){
+			inputObject.getParams().put("deleteFlag", 0);
+			inputObject.getParams().put("createTime", createTime);
+			return getBaseDao().insert("#entityName#Mapper.insert", inputObject.getParams());
+	//	}else{
+	//		outputObject.setReturnCode("-1");
+	//		outputObject.setReturnMessage("#objectCN#已经存在，请修改!");
+	//		return -1;
+	//	}
+	}
+
+	@Override
+	public int update#entityName#(InputObject inputObject,
+			OutputObject outputObject) throws Exception {
+		String updateTime = DateUtil.date2String(new Date(),DateUtil.DATE_PATTERN.YYYY_MM_DD_HH_MM_SS);
+		//查询#objectCN#是否存在 有code验证时放开
+		//Object object = getBaseDao().queryForObject("#entityName#Mapper.getByCode", inputObject.getParams());
+		//if(object==null){
+			inputObject.getParams().put("updateTime", updateTime);
+			return getBaseDao().update("#entityName#Mapper.update", inputObject.getParams());
+		//}else{
+		//	outputObject.setReturnCode("-1");
+		//	outputObject.setReturnMessage("#objectCN#已经存在，请修改!");
+		//	return -1;
+		//}
+
+	}
+	@Override
+	public int delete#entityName#(InputObject inputObject, OutputObject outputObject)
+			throws Exception {
+		return getBaseDao().delete("#entityName#Mapper.delete", inputObject.getParams());
+	}
+	
+	@Override
+	public int logicDelete#entityName#(InputObject inputObject,
+			OutputObject outputObject) throws Exception {
+		String updateTime = DateUtil.date2String(new Date(),DateUtil.DATE_PATTERN.YYYY_MM_DD_HH_MM_SS);
+		inputObject.getParams().put("updateTime", updateTime);
+		return getBaseDao().update("#entityName#Mapper.logicDelete", inputObject.getParams());
+
+	}
+	
+
+}

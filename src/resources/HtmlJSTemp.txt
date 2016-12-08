@@ -1,0 +1,198 @@
+$(document).ready(function(){
+	
+//列表分页每页显示多少条记录
+var global_limit = 10 ;
+	//初始化#objectCN#列表信息
+	init#entityName#ListInfo();
+	
+	
+	//新增#objectCN#信息时，validate验证，验证通过后调用保存方法 
+	$("#add#entityName#Form").validate({
+        submitHandler:function(form){
+        	add#entityName#();
+        }    
+    });
+	
+	//新增#objectCN#信息
+	$("#save#entityName#Btn").click(function(){
+		var form = $("#add#entityName#Form");
+		form.submit();
+	});
+	
+	//选中#objectCN#信息
+	$("##entityVar#ListTable").delegate("tr","click",function(){
+		#selectJsP1#
+		#selectJsP2#
+		$(this).css("background","#DFEBF2").siblings().css("background","#FFFFFF");
+		return false;
+	});
+	
+	
+	//修改#objectCN#信息时，jqvalidate验证，验证通过后调用保存方法 
+	$("#edit#entityName#Form").validate({
+        submitHandler:function(form){
+        	edit#entityName#();
+        }    
+    });
+	
+	//保存编辑的#objectCN#信息
+	$("#edit-save#entityName#Btn").click(function(){
+		var form = $("#edit#entityName#Form");
+		form.submit();
+	});
+	//编辑#objectCN#信息
+	$("#edit#entityName#Btn").click(function(){
+		var #pkPropertyName# = $("#edit-#pkPropertyName#").val();
+		if(#pkPropertyName#==""){
+			alert("请选择一条信息!",$.scojs_message.TYPE_ERROR);
+			return false;
+		}
+	});
+	
+	//删除#objectCN#信息
+	$("#del#entityName#Btn").click(function(){
+		//logicDel#entityName#();//逻辑删除
+		del#entityName#()
+	});
+	
+	//初始化#objectCN#列表信息
+	function init#entityName#ListInfo(currentPage, limit){
+		if(typeof currentPage == "undefined"){
+			currentPage = 1;
+		}
+		if(typeof limit == "undefined"){
+			limit = global_limit;
+		}
+		var url = contextPath + "#subModifier##subEntityName#/getList";
+		var params = "pageNumber="+currentPage+"&limit="+limit;
+		//异步请求#objectCN#列表数据
+		Util.ajax.postJson(url, params, function(data, flag){
+			var source = $("##entityVar#-list-template").html();
+			var templet = Handlebars.compile(source);
+			if(flag && data.returnCode=="0"){
+				//渲染列表数据
+				var htmlStr = templet(data.beans);
+				$("##entityVar#ListTable").html(htmlStr);
+				//初始化分页数据(当前页码，总数，回调查询函数)
+				initPaginator(currentPage, data.bean.count, init#entityName#ListInfo);
+			}
+		});
+	}
+	
+	
+	//新增#objectCN#信息
+	function add#entityName#(){
+		var url = contextPath + "#subModifier##subEntityName#/insert#entityName#";
+		var params = $("#add#entityName#Form").serialize();
+		//异步请求新增#objectCN#信息
+		Util.ajax.postJson(url, params, function(data, flag){
+			if(flag){
+				if(data.returnCode=="0"){
+					//$("#alert-info-content").html("#objectCN#新增成功!");
+					//$("#alert-info").modal("show");
+					alert("#objectCN#新增成功!");
+					$("#myModal").modal('hide');
+					//重新请求列表数据
+					init#entityName#ListInfo();
+					//清空新增#objectCN#的弹窗信息
+					$("#add#entityName#Form input").val("");
+					$("#descn").val("");
+				}
+			}else{
+				if(data.returnCode=="-1"){
+					alert("#objectCN#编码已经存在，请修改!");
+				}else{
+					alert(data.returnMessage);
+				}
+			}
+		});
+	}
+	
+	
+	//修改#objectCN#信息
+	function edit#entityName#(){
+		#editValidate#
+		#editValidateIf#
+		var url = contextPath + "#subModifier##subEntityName#/update#entityName#";
+		var params = $("#edit#entityName#Form").serialize();
+		//异步请求修改#objectCN#信息
+		Util.ajax.postJson(url, params, function(data, flag){
+			if(flag){
+				if(data.returnCode=="0"){
+					alert("#objectCN#信息修改成功!");
+					//编辑#objectCN#信息清空
+					$("#edit#entityName#Form input").val("");
+					$("#edit-descn").val("");
+					//重新请求列表数据
+					init#entityName#ListInfo();
+					$("#myModal1").modal('hide');
+				}
+			}else{
+				if(data.returnCode=="-1"){
+					alert("#objectCN#编码已经存在，请修改!");
+				}else{
+					alert(data.returnMessage);
+				}
+			}
+		});
+	}
+	//删除#objectCN#
+	function del#entityName#(){
+		var #pkPropertyName# = $("#edit-#pkPropertyName#").val();
+		if(#pkPropertyName#==""){
+			alert("请选择一条信息!",$.scojs_message.TYPE_ERROR);
+			return false;
+		}
+		confirm("确定删除吗？",function(){
+			var url = contextPath + "#subModifier##subEntityName#/delete#entityName#";
+			var params = $("#edit#entityName#Form").serialize();
+			//异步请求逻辑删除#objectCN#信息
+			Util.ajax.postJson(url, params, function(data, flag){
+				if(flag){
+					if(data.returnCode=="0"){
+						alert("#objectCN#删除成功!");
+						//编辑#objectCN#信息清空
+						$("#edit#entityName#Form input").val("");
+						$("#edit-descn").val("");
+						//重新请求列表数据
+						init#entityName#ListInfo();
+					}
+				}else{
+					alert(data.returnMessage);
+				}
+			});
+		});
+	}
+	
+	//逻辑删除#objectCN#
+	function logicDel#entityName#(){
+		var #pkPropertyName# = $("#edit-#pkPropertyName#").val();
+		if(#pkPropertyName#==""){
+			alert("请选择一条信息!",$.scojs_message.TYPE_ERROR);
+			return false;
+		}
+		confirm("确定删除吗？",function(){
+			var url = contextPath + "#subModifier##subEntityName#/logicDelete#entityName#";
+			var params = $("#edit#entityName#Form").serialize();
+			//异步请求逻辑删除#objectCN#信息
+			Util.ajax.postJson(url, params, function(data, flag){
+				if(flag){
+					if(data.returnCode=="0"){
+						alert("#objectCN#删除成功!");
+						//编辑#objectCN#信息清空
+						$("#edit#entityName#Form input").val("");
+						$("#edit-descn").val("");
+						//重新请求列表数据
+						init#entityName#ListInfo();
+					}
+				}else{
+					alert(data.returnMessage);
+				}
+			});
+		});
+	}
+
+});
+
+
+

@@ -1,0 +1,57 @@
+package #servicePackageName#;
+
+import com.ai.frame.bean.InputObject;
+import com.ai.frame.bean.OutputObject;
+
+public interface I#entityName#Service {
+	
+	/**
+	 * 分页查询#objectCN#	 
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	public void getList(InputObject inputObject, OutputObject outputObject) throws Exception;
+	/**
+	 * 根据ID查询#objectCN#
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	public void getById(InputObject inputObject,OutputObject outputObject)throws Exception;
+	/**
+	 * 查询所有#objectCN#
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	public void getAll(InputObject inputObject, OutputObject outputObject) throws Exception;
+	/**
+	 * 插入一条新的#objectCN#
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	public int insert#entityName#(InputObject inputObject, OutputObject outputObject) throws Exception;
+	/**
+	 * 更新#objectCN#
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	public int update#entityName#(InputObject inputObject, OutputObject outputObject) throws Exception;
+	/**
+	 * 删除#objectCN#(预留)
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	public int delete#entityName#(InputObject inputObject, OutputObject outputObject) throws Exception;
+	/**
+	 * 逻辑删除#objectCN#
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	public int logicDelete#entityName#(InputObject inputObject, OutputObject outputObject) throws Exception;
+}

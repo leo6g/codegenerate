@@ -1,0 +1,11 @@
+package #entityPackageName#;
+
+import java.util.Date;
+import org.hibernate.validator.constraints.NotEmpty;
+import com.lfc.wxadminweb.common.form.BaseForm;
+public class #entityName#Form extends BaseForm{
+
+	#propNameDefined#
+	
+	#getterAndSetter#
+}
