@@ -42,7 +42,7 @@ public class #entityName#ServiceImpl extends BaseServiceImpl implements I#entity
 		//查询#objectCN#是否已经存在 有code验证时放开
 		//Object object = getBaseDao().queryForObject("#entityName#Mapper.getByCode", inputObject.getParams());
 	//	if(object==null){
-			inputObject.getParams().put("deleteFlag", 0);
+			inputObject.getParams().put("deleteFlag", "0");
 			inputObject.getParams().put("createTime", createTime);
 			return getBaseDao().insert("#entityName#Mapper.insert", inputObject.getParams());
 	//	}else{

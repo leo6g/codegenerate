@@ -28,6 +28,7 @@ public class TypeUtil {
 		jdbcTypeMap.put("REAL","REAL");
 		jdbcTypeMap.put("RAW","VARBINARY");
 		jdbcTypeMap.put("VARCHAR","VARCHAR");
+		jdbcTypeMap.put("INT","INTEGER");
 		javaTypeMap.put("RAW","byte[]");
 		javaTypeMap.put("BIT","Boolean");
 		javaTypeMap.put("BLOB","byte[]");
@@ -44,6 +45,7 @@ public class TypeUtil {
 		javaTypeMap.put("REAL","Float");
 		javaTypeMap.put("RAW","byte[]");
 		javaTypeMap.put("VARCHAR","String");
+		javaTypeMap.put("INT","VARCHAR");
 	}
 	public static String getJdbcType(String oracleType){
 		return jdbcTypeMap.get(oracleType.toUpperCase());

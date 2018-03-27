@@ -16,7 +16,7 @@ public class CodeGenerator {
 	 */
 	public static void createSqlMapperFile(){
 		String tableName = ConfigHelper.getValue("dbTableName").trim();
-		String dbTableName = tableName.toUpperCase();
+		String dbTableName = tableName;
 		Map<String,ColumnInfo> mapInfo =  CommonDAO.getTableColumnInfo(dbTableName);
 		String resultMap="",conditionLoop="", columnList="",columnValueList="";
 		String updateByPkCond="" , insertSelectiveCond="", insertSelectiveValCond="",updateByPkSelective="";
@@ -179,7 +179,7 @@ public class CodeGenerator {
 	 * 创建controller
 	 */
 	public static void createController(){
-		String tableName = ConfigHelper.getValue("dbTableName").toUpperCase().trim();
+		String tableName = ConfigHelper.getValue("dbTableName").trim();
 		String fileContent = ReadTempUtil.readFileContent("ControllerTemp.txt");
 		Map<String,String> replacedMap = GetConfigInfoUtil.getConfigMap();
 		fileContent = ReadTempUtil.replaceVar(fileContent,replacedMap);
@@ -293,7 +293,7 @@ public class CodeGenerator {
 	 * 创建html 文件
 	 */
 	public static void createHtml(){
-		String tableName = ConfigHelper.getValue("dbTableName").toUpperCase().trim();
+		String tableName = ConfigHelper.getValue("dbTableName").trim();
 		String fileContent = ReadTempUtil.readFileContent("HtmlTemp.txt");
 		Map<String,String> replacedMap = GetConfigInfoUtil.getConfigMap();
 		String editInfoContent = "",addInfoContent="", tableHeader="",tableBodyJS="";
